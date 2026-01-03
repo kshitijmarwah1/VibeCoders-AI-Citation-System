@@ -4,7 +4,7 @@
 
 **Universal AI Hallucination & Citation Verification System**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 18+](https://img.shields.io/badge/node-18+-green.svg)](https://nodejs.org/)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System)
@@ -42,7 +42,6 @@ A generic, domain-aware, multi-input AI verification system designed to detect h
 - [Contributing](#contributing)
 - [License](#license)
 - [Collaborators](#collaborators)
-- [Automated Updates](#automated-updates)
 
 ---
 
@@ -412,7 +411,13 @@ When the backend is running, interactive API documentation is available at:
 
 ## 📖 Documentation
 
-Comprehensive documentation is available in the web interface at `/docs` or visit:
+Comprehensive documentation is available in the web interface. When running the application locally, access it at:
+
+- **Web Interface Docs**: [http://localhost:3000/docs](http://localhost:3000/docs) (when frontend is running)
+- **API Docs (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs) (when backend is running)
+- **API Docs (ReDoc)**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (when backend is running)
+
+The documentation includes:
 
 - **Setup Guide**: Detailed installation and configuration instructions
 - **API Documentation**: Complete API reference with examples
@@ -420,7 +425,7 @@ Comprehensive documentation is available in the web interface at `/docs` or visi
 - **Privacy Policy**: Data handling and privacy information
 - **Contributing Guide**: How to contribute to the project
 
-Access the documentation by clicking the "Docs" button in the navigation bar of the web interface.
+Access the documentation by clicking the "Docs" button in the navigation bar of the web interface, or visit the URLs above when the servers are running.
 
 ---
 
@@ -600,6 +605,14 @@ We welcome contributions! Please see our contributing guidelines:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+**Copyright (c) 2026 Kshitij Marwah**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 ---
 
 ## 👥 Collaborators
@@ -629,7 +642,7 @@ This project was created and maintained by:
 
 Made with ❤️ by VibeCoders
 
-[⭐ Star us on GitHub](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System) • [📖 Documentation](./frontend/app/docs/page.tsx) • [🐛 Report Bug](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/issues) • [💡 Request Feature](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/issues)
+[⭐ Star us on GitHub](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System) • [📖 Documentation](#documentation) • [🐛 Report Bug](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/issues) • [💡 Request Feature](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/issues) • [📄 License](LICENSE)
 
 </div>
 
