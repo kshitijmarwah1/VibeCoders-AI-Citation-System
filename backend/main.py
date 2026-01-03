@@ -1,10 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from tavily import TavilyClient
+from dotenv import load_dotenv
+from services.citation_extractor import extract_citations
+import os
 import re
 import random
 
 app = FastAPI()
+
+load_dotenv()
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+
+tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
 # CORS
 app.add_middleware(
@@ -57,7 +66,28 @@ def extract_claims(text: str):
 
     return claims
 
-def fake_verify_claim(claim: str):
+def search_web_for_claim(claim: str):
+    """
+    Search the web for evidence supporting the claim
+    """
+    response = tavily.search(
+        query=claim,
+        search_depth="basic",
+        max_results=3
+    )
+
+    citations = []
+
+    for result in response.get("results", []):
+        citations.append({
+            "title": result.get("title"),
+            "url": result.get("url")
+        })
+
+    return citations
+
+
+def verify_claim_with_search(claim: str):
     hallucination_keywords = [
         "sun revolves around the earth",
         "earth is flat",
@@ -71,26 +101,23 @@ def fake_verify_claim(claim: str):
         if keyword in claim_lower:
             return {
                 "status": "hallucinated",
-                "confidence": round(random.uniform(0.05, 0.3), 2),
+                "confidence": 0.1,
                 "citations": []
             }
 
-    # Fake citations for verified claims
-    fake_citations = [
-        {
-            "title": "Wikipedia",
-            "url": "https://en.wikipedia.org"
-        },
-        {
-            "title": "Britannica",
-            "url": "https://www.britannica.com"
+    citations = search_web_for_claim(claim)
+
+    if len(citations) == 0:
+        return {
+            "status": "hallucinated",
+            "confidence": 0.2,
+            "citations": []
         }
-    ]
 
     return {
         "status": "verified",
-        "confidence": round(random.uniform(0.75, 0.95), 2),
-        "citations": fake_citations
+        "confidence": round(random.uniform(0.7, 0.9), 2),
+        "citations": citations
     }
 
 @app.post("/verify")
@@ -99,16 +126,19 @@ def verify_text(data: TextInput):
     results = []
 
     for c in claims:
-        verification = fake_verify_claim(c)
+        verification = verify_claim_with_search(c)
         results.append({
-                "claim": c,
-                "status": verification["status"],
-                "confidence": verification["confidence"],
-                "citations": verification["citations"]
+            "claim": c,
+            "status": verification["status"],
+            "confidence": verification["confidence"],
+            "citations": verification["citations"]
         })
 
+    extracted_citations = extract_citations(data.text)
 
     return {
         "total_claims": len(results),
-        "claims": results
+        "claims": results,
+        "extracted_citations": extracted_citations
     }
+
