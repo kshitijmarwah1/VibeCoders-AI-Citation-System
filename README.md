@@ -15,6 +15,7 @@ A generic, domain-aware, multi-input AI verification system designed to detect h
 
 </div>
 
+<a id="presentation--demo"></a>
 ## 🎬 Presentation & Demo
 
 - **📊 Project Presentation**: [Add PPT/Slides Link Here]
@@ -25,6 +26,7 @@ A generic, domain-aware, multi-input AI verification system designed to detect h
 
 ---
 
+<a id="table-of-contents"></a>
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -45,6 +47,7 @@ A generic, domain-aware, multi-input AI verification system designed to detect h
 
 ---
 
+<a id="overview"></a>
 ## 🎯 Overview
 
 **VibeVerifier** is a universal verification engine that analyzes and verifies factual claims in any content. Unlike traditional fact-checking tools, VibeVerifier is designed to work across multiple domains (medical, finance, legal, technology, general) and supports various input formats (text, URLs, PDFs, DOCX files).
@@ -70,6 +73,7 @@ VibeVerifier is an AI-powered system that:
 
 ---
 
+<a id="presentation--demo"></a>
 ## 🎬 Presentation & Demo
 
 - **📊 Project Presentation**: [Add PPT/Slides Link Here]
@@ -78,6 +82,7 @@ VibeVerifier is an AI-powered system that:
 
 ---
 
+<a id="features"></a>
 ## ✨ Features
 
 ### Core Features
@@ -128,6 +133,7 @@ VibeVerifier is an AI-powered system that:
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 ### System Overview
@@ -198,6 +204,7 @@ VibeVerifier follows a modular architecture with clear separation of concerns:
 
 ---
 
+<a id="installation"></a>
 ## 📦 Installation
 
 ### Prerequisites
@@ -265,6 +272,7 @@ For detailed installation instructions, see the [Documentation](#documentation) 
 
 ---
 
+<a id="configuration"></a>
 ## ⚙️ Configuration
 
 ### Backend Configuration
@@ -305,6 +313,7 @@ Edit these YAML files to adjust credibility scores, similarity thresholds, and d
 
 ---
 
+<a id="usage"></a>
 ## 🚀 Usage
 
 ### Web Interface
@@ -346,6 +355,7 @@ For detailed API documentation, see the [API Reference](#api-reference) section.
 
 ---
 
+<a id="api-reference"></a>
 ## 📚 API Reference
 
 ### Base URL
@@ -409,6 +419,7 @@ When the backend is running, interactive API documentation is available at:
 
 ---
 
+<a id="documentation"></a>
 ## 📖 Documentation
 
 Comprehensive documentation is available in the web interface. When running the application locally, access it at:
@@ -429,6 +440,7 @@ Access the documentation by clicking the "Docs" button in the navigation bar of 
 
 ---
 
+<a id="project-structure"></a>
 ## 📁 Project Structure
 
 ```
@@ -500,6 +512,7 @@ VibeCoders-AI-Citation-System/
 
 ---
 
+<a id="technology-stack"></a>
 ## 🛠️ Technology Stack
 
 ### Backend
@@ -537,6 +550,7 @@ VibeCoders-AI-Citation-System/
 
 ---
 
+<a id="design-principles"></a>
 ## 🎯 Design Principles
 
 VibeVerifier is built on core design principles that ensure reliability and fairness:
@@ -571,6 +585,7 @@ VibeVerifier is built on core design principles that ensure reliability and fair
 
 ---
 
+<a id="contributing"></a>
 ## 🤝 Contributing
 
 We welcome contributions! Please see our contributing guidelines:
@@ -601,6 +616,7 @@ We welcome contributions! Please see our contributing guidelines:
 
 ---
 
+<a id="license"></a>
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -615,6 +631,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
+<a id="collaborators"></a>
 ## 👥 Collaborators
 
 ### Project Makers
