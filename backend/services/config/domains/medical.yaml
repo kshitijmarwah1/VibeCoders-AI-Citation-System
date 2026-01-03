@@ -1,0 +1,23 @@
+name: medical
+
+similarity_threshold: 0.40
+contradiction_threshold: 0.45
+contradiction_penalty: 0.5
+embedding_model: pritamdeka/BioBERT-mnli-snli-scinli-scitail-mednli-stsb
+
+trusted_domains:
+  - pubmed.ncbi.nlm.nih.gov
+  - who.int
+  - fda.gov
+  - mayoclinic.org
+  - nih.gov
+  - cdc.gov
+
+credibility_weights:
+  pubmed.ncbi.nlm.nih.gov: 1.0
+  who.int: 0.95
+  fda.gov: 0.95
+  nih.gov: 0.95
+  cdc.gov: 0.95
+  mayoclinic.org: 0.9
+  default: 0.3

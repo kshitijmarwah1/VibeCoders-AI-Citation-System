@@ -1,0 +1,21 @@
+name: general
+
+similarity_threshold: 0.35
+contradiction_threshold: 0.35
+contradiction_penalty: 0.7
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+trusted_domains:
+  - wikipedia.org
+  - britannica.com
+  - bbc.com
+  - reuters.com
+  - nationalgeographic.com
+
+credibility_weights:
+  wikipedia.org: 1.0
+  britannica.com: 0.95
+  bbc.com: 0.85
+  reuters.com: 0.85
+  nationalgeographic.com: 0.9
+  default: 0.4

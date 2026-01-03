@@ -1,0 +1,23 @@
+name: finance
+
+similarity_threshold: 0.38
+contradiction_threshold: 0.4
+contradiction_penalty: 0.65
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+trusted_domains:
+  - sec.gov
+  - bloomberg.com
+  - reuters.com
+  - investopedia.com
+  - nasdaq.com
+  - marketwatch.com
+
+credibility_weights:
+  sec.gov: 1.0
+  bloomberg.com: 0.9
+  reuters.com: 0.9
+  nasdaq.com: 0.85
+  marketwatch.com: 0.85
+  investopedia.com: 0.8
+  default: 0.35

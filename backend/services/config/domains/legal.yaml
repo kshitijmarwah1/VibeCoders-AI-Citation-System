@@ -1,0 +1,21 @@
+name: legal
+
+similarity_threshold: 0.42
+contradiction_threshold: 0.5
+contradiction_penalty: 0.6
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+trusted_domains:
+  - law.cornell.edu
+  - supremecourt.gov
+  - oyez.org
+  - justia.com
+  - findlaw.com
+
+credibility_weights:
+  law.cornell.edu: 1.0
+  supremecourt.gov: 0.95
+  oyez.org: 0.9
+  justia.com: 0.85
+  findlaw.com: 0.85
+  default: 0.4

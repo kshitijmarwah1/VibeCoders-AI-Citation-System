@@ -1,0 +1,23 @@
+name: technology
+
+similarity_threshold: 0.35
+contradiction_threshold: 0.35
+contradiction_penalty: 0.75
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+
+trusted_domains:
+  - arxiv.org
+  - openai.com
+  - deepmind.com
+  - ieee.org
+  - github.com
+  - stackoverflow.com
+
+credibility_weights:
+  arxiv.org: 0.9
+  ieee.org: 1.0
+  openai.com: 0.85
+  deepmind.com: 0.85
+  github.com: 0.8
+  stackoverflow.com: 0.75
+  default: 0.4
