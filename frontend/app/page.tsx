@@ -171,13 +171,6 @@ export default function Home() {
               <ResultsDisplay results={results} loading={false} />
             </div>
           )}
-          
-          {/* Debug info (remove in production) */}
-          {process.env.NODE_ENV === 'development' && results && (
-            <div className="p-4 bg-gray-900/50 border border-gray-700 rounded text-xs text-gray-400">
-              <p>Debug: Results loaded - {results.total_claims} claims, Domain: {results.domain}</p>
-            </div>
-          )}
         </div>
       </main>
     </div>

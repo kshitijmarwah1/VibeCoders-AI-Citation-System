@@ -25,45 +25,44 @@ async def verify_claims_batch(
     progress_callback: Callable[[int, int, str], None] = None
 ) -> List[Dict]:
     """
-    Verify multiple claims in parallel batches with real progress tracking.
+    Verify multiple claims in parallel batches with batch-level progress tracking.
     
     Args:
         claims: List of claim strings
         domain: Domain for verification
         batch_size: Number of claims to process in parallel
-        progress_callback: Callback function(completed, total, current_claim)
+        progress_callback: Callback function(completed_batches, total_batches, message)
     
     Returns:
         List of verification results
     """
     results = []
     total = len(claims)
+    total_batches = (total + batch_size - 1) // batch_size
     
     # Process in batches to avoid overwhelming the system
     for i in range(0, total, batch_size):
         batch = claims[i:i + batch_size]
         batch_num = (i // batch_size) + 1
-        total_batches = (total + batch_size - 1) // batch_size
         
         logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch)} claims)")
         
-        # Process batch in parallel with individual progress tracking
-        async def verify_with_progress(claim: str, index: int):
-            """Verify a single claim and update progress."""
+        # Update progress at batch start
+        if progress_callback:
+            progress_callback(
+                batch_num - 1,  # completed batches (0-indexed for start)
+                total_batches,
+                f"Processing batch {batch_num}/{total_batches} ({len(batch)} claims)..."
+            )
+        
+        # Process batch in parallel without individual claim progress tracking
+        async def verify_claim_simple(claim: str):
+            """Verify a single claim without progress tracking."""
             try:
-                # Update progress before starting
-                if progress_callback:
-                    progress_callback(i + index, total, f"Searching for: {claim[:50]}...")
-                
                 result = await verify_claim_async(claim, domain)
-                
-                # Update progress after completion
-                if progress_callback:
-                    progress_callback(i + index + 1, total, f"Completed: {claim[:50]}...")
-                
                 return result
             except Exception as e:
-                logger.error(f"Verification failed for claim {i+index+1}: {e}")
+                logger.error(f"Verification failed for claim: {e}")
                 return {
                     "claim": claim,
                     "status": "error",
@@ -75,8 +74,8 @@ async def verify_claims_batch(
                     "explanation": f"Verification failed: {str(e)}"
                 }
         
-        # Create tasks with progress tracking
-        batch_tasks = [verify_with_progress(claim, j) for j, claim in enumerate(batch)]
+        # Create tasks for batch processing
+        batch_tasks = [verify_claim_simple(claim) for claim in batch]
         batch_results = await asyncio.gather(*batch_tasks, return_exceptions=True)
         
         # Handle results
@@ -85,6 +84,14 @@ async def verify_claims_batch(
                 logger.error(f"Unexpected error in batch: {result}")
                 continue
             results.append(result)
+        
+        # Update progress after batch completion
+        if progress_callback:
+            progress_callback(
+                batch_num,  # completed batches (1-indexed for completion)
+                total_batches,
+                f"Completed batch {batch_num}/{total_batches} ({len(batch)} claims verified)"
+            )
         
         # Small delay between batches to prevent rate limiting
         if i + batch_size < total:

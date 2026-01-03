@@ -6,11 +6,10 @@ import os
 import logging
 import uuid
 import asyncio
-import json
 
 from services.core.claims.domain_detector import detect_domain
 from services.core.claims.extractor import extract_claims
-from services.core.verification.verify_async import verify_claims_batch
+from services.core.verification.verify_async import verify_claims_batch, verify_claim_async
 from services.core.verification.citation_verifier import verify_citations_async
 from services.core.scoring.aggregation import calculate_overall_score
 from services.core.explainability.traces import extract_citations
@@ -42,7 +41,7 @@ async def verify_text_async(data: TextInput):
         normalized_text = data.text
         
         # Start verification in background
-        asyncio.create_task(run_verification_async(normalized_text, task_id))
+        asyncio.create_task(run_verification_async(normalized_text, task_id, "text"))
         
         return {"task_id": task_id, "status": "started"}
     except Exception as e:
@@ -50,19 +49,36 @@ async def verify_text_async(data: TextInput):
         raise HTTPException(status_code=400, detail=f"Invalid text input: {str(e)}")
 
 
-async def run_verification_async(normalized_text: str, task_id: str = None):
+async def run_verification_async(normalized_text: str, task_id: str = None, input_type: str = "general"):
     """
     Run the complete verification pipeline asynchronously with REAL progress tracking.
+    
+    Args:
+        normalized_text: The text to verify
+        task_id: Task ID for progress tracking
+        input_type: Type of input ("text", "url", "file", "general")
     """
     if not normalized_text or not normalized_text.strip():
         raise HTTPException(status_code=400, detail="No text content provided")
 
     try:
-        # Step 1: Extract claims (5% of progress)
+        is_text_input = input_type == "text"
+        
+        # Step 1: Extract claims with granular progress for text inputs
         if task_id:
+            if is_text_input:
+                update_progress(task_id, 2, 100, "Analyzing text structure...", "processing")
+                await asyncio.sleep(0.1)  # Small delay to show progress
+                update_progress(task_id, 4, 100, "Segmenting sentences...", "processing")
+                await asyncio.sleep(0.1)
             update_progress(task_id, 5, 100, "Extracting claims from text...", "processing")
         
         claims = extract_claims(normalized_text)
+        
+        # Additional progress for text inputs after extraction
+        if is_text_input and task_id and claims:
+            await asyncio.sleep(0.1)
+            update_progress(task_id, 7, 100, f"Found {len(claims)} claim(s) to verify...", "processing")
         
         if not claims:
             extracted_citations = extract_citations(normalized_text)
@@ -77,28 +93,52 @@ async def run_verification_async(normalized_text: str, task_id: str = None):
                 "citation_verification": {"verified": [], "invalid": [], "total": 0}
             }
 
-        # Step 2: Detect domain (10% of progress)
+        # Step 2: Detect domain (7-10% for text, 5-10% for others)
         if task_id:
+            if is_text_input:
+                await asyncio.sleep(0.1)
             update_progress(task_id, 10, 100, "Detecting domain...", "processing")
         
         domain = detect_domain(normalized_text)
         
         # Step 3: Verify claims in parallel batches (10-85% of progress)
-        # Each claim takes (85-10)/total_claims percentage
-        def progress_callback(completed: int, total: int, current: str):
-            if task_id:
-                # Real progress: 10% to 85% based on actual completion
-                base_percentage = 10
-                progress_range = 75  # 85 - 10
-                percentage = base_percentage + int((completed / total) * progress_range)
-                update_progress(task_id, percentage, 100, f"Verifying claim {completed}/{total}: {current}", "processing")
-        
-        results = await verify_claims_batch(
-            claims,
-            domain,
-            batch_size=5,
-            progress_callback=progress_callback
-        )
+        # Progress is tracked by batch completion
+        # For text inputs with few claims, use claim-level progress instead
+        if is_text_input and len(claims) <= 3:
+            # For very short text inputs, track individual claim progress
+            def progress_callback_text(completed: int, total: int, current: str):
+                if task_id:
+                    # Real progress: 10% to 85% based on claim completion
+                    base_percentage = 10
+                    progress_range = 75  # 85 - 10
+                    percentage = base_percentage + int((completed / total) * progress_range)
+                    update_progress(task_id, percentage, 100, current, "processing")
+            
+            # Process claims individually for better progress visibility
+            results = []
+            for idx, claim in enumerate(claims):
+                if task_id:
+                    progress_callback_text(idx, len(claims), f"Verifying claim {idx + 1}/{len(claims)}...")
+                result = await verify_claim_async(claim, domain)
+                results.append(result)
+                if task_id:
+                    progress_callback_text(idx + 1, len(claims), f"Completed claim {idx + 1}/{len(claims)}")
+        else:
+            # Batch processing for longer inputs
+            def progress_callback(completed_batches: int, total_batches: int, current: str):
+                if task_id:
+                    # Real progress: 10% to 85% based on batch completion
+                    base_percentage = 10
+                    progress_range = 75  # 85 - 10
+                    percentage = base_percentage + int((completed_batches / total_batches) * progress_range)
+                    update_progress(task_id, percentage, 100, current, "processing")
+            
+            results = await verify_claims_batch(
+                claims,
+                domain,
+                batch_size=5,
+                progress_callback=progress_callback
+            )
 
         # Step 4: Verify citations (85-95% of progress)
         if task_id:
@@ -156,7 +196,7 @@ async def verify_text(data: TextInput):
         logger.info(f"Starting text verification for {len(normalized_text)} characters, task_id: {task_id}")
         
         # Run verification with progress tracking
-        result = await run_verification_async(normalized_text, task_id)
+        result = await run_verification_async(normalized_text, task_id, "text")
         
         logger.info(f"Text verification completed: {result.get('total_claims', 0)} claims found")
         
@@ -177,7 +217,7 @@ async def verify_url(data: UrlInput):
         task_id = str(uuid.uuid4())
         url = str(data.url)
         normalized_text = normalize_input(urls=[url])
-        return await run_verification_async(normalized_text, task_id)
+        return await run_verification_async(normalized_text, task_id, "url")
     except HTTPException:
         raise
     except Exception as e:
@@ -207,7 +247,7 @@ async def verify_file(file: UploadFile = File(...)):
 
         update_progress(task_id, 5, 100, "Extracting text from file...", "processing")
         normalized_text = normalize_input(files=[tmp_path])
-        return await run_verification_async(normalized_text, task_id)
+        return await run_verification_async(normalized_text, task_id, "file")
     except HTTPException:
         raise
     except Exception as e:
@@ -232,7 +272,8 @@ async def verify_batch(data: BatchInput):
         
         urls = [str(url) for url in data.urls] if data.urls else None
         normalized_text = normalize_input(text=data.text, urls=urls)
-        return await run_verification_async(normalized_text, task_id)
+        input_type = "text" if data.text and not urls else "general"
+        return await run_verification_async(normalized_text, task_id, input_type)
     except HTTPException:
         raise
     except Exception as e:
