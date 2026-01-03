@@ -1,10 +1,3 @@
-from sentence_transformers import SentenceTransformer, util
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-# Dummy trusted reference (hackathon-safe)
-TRUSTED_REFERENCE = "Transformers were introduced in 2017 by Vaswani et al."
-
 def check_claims(claims):
     results = []
 
@@ -15,15 +8,19 @@ def check_claims(claims):
 
         if score > 0.75:
             status = "Verified"
+            reason = "Matches trusted reference with high similarity"
         elif score > 0.4:
             status = "Uncertain"
+            reason = "Partial match, insufficient evidence"
         else:
             status = "Likely Hallucinated"
+            reason = "No reliable source supports this claim"
 
         results.append({
             "claim": claim,
             "confidence": round(score, 2),
-            "status": status
+            "status": status,
+            "reason": reason
         })
 
     return results

@@ -13,15 +13,24 @@ def verify_text(payload: dict):
 
     claims = extract_claims(text)
     citations = extract_citations(text)
+
     verified_dois, fake_dois = verify_dois(citations["dois"])
     claim_results = check_claims(claims)
+
     risk = calculate_risk(
         unverified_claims=len([c for c in claim_results if c["status"] != "Verified"]),
         fake_citations=len(fake_dois),
         broken_links=len(citations["urls"])
     )
 
+    summary = (
+        "High hallucination risk detected"
+        if risk > 0.6
+        else "Low hallucination risk"
+    )
+
     return {
+        "summary": summary,
         "hallucination_risk": risk,
         "claims": claim_results,
         "verified_dois": verified_dois,
