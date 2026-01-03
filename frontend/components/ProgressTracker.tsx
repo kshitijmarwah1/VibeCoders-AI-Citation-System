@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 interface ProgressData {
   completed: number;
   total: number;
@@ -30,7 +32,7 @@ export function ProgressTracker({ taskId, onComplete }: ProgressTrackerProps) {
     }
 
     setIsVisible(true);
-    const eventSource = new EventSource(`http://127.0.0.1:8000/progress/stream/${taskId}`);
+    const eventSource = new EventSource(`${API_BASE_URL}/progress/stream/${taskId}`);
 
     eventSource.onmessage = (event) => {
       try {
