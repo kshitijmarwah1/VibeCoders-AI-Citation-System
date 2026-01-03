@@ -2,7 +2,7 @@
 
 # 🎨✨ VibeVerifier ✨🎨
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=700&lines=Universal+AI+Hallucination+%26+Citation+Verification+System;Detect+Hallucinations+%7C+Verify+Claims+%7C+Provide+Confidence+Scores" alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=28&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=1000&lines=Universal+AI+Hallucination+%26+Citation+Verification+System;Detect+Hallucinations+%7C+Verify+Claims+%7C+Provide+Confidence+Scores" alt="Typing SVG" />
 
 <div>
   <img src="https://img.shields.io/badge/License-MIT-FF6B9D?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License" />
@@ -877,7 +877,7 @@ This project was created and maintained by:
 
 <div>
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=500&lines=Made+with+%E2%9D%A4%EF%B8%8F+by+VibeCoders;Detect+Hallucinations+%7C+Verify+Claims+%7C+Provide+Confidence+Scores" alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=18&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=800&lines=Made+with+%E2%9D%A4%EF%B8%8F+by+VibeCoders;Detect+Hallucinations+%7C+Verify+Claims+%7C+Provide+Confidence+Scores" alt="Typing SVG" />
 
 </div>
 
