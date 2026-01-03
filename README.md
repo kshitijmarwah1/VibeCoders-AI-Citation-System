@@ -604,8 +604,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Collaborators
 
-> **Note**: This section is automatically updated from GitHub contributors. To update manually, run `python scripts/update_contributors.py`
-
 ### Project Makers
 
 This project was created and maintained by:
@@ -613,23 +611,15 @@ This project was created and maintained by:
 <div align="center">
 
 #### 👑 Dhruv Gupta
-**GitHub**: [@BeastBoom](https://github.com/BeastBoom)
+**GitHub**: [@BeastBoom](https://github.com/BeastBoom)  
+**Contributions**: 7 commits
 
 #### 👑 Kshitij Marwah
-**GitHub**: [@kshitijmarwah1](https://github.com/kshitijmarwah1)
+**GitHub**: [@kshitijmarwah1](https://github.com/kshitijmarwah1)  
+**Contributions**: 2 commits
 
 </div>
 
-### Contributors
-
-We thank all contributors who have helped improve VibeVerifier:
-
-<div align="center">
-
-<!-- Contributors list will be automatically updated by GitHub Actions -->
-<!-- Run `python scripts/update_contributors.py` to update manually -->
-
-</div>
 
 ---
 
