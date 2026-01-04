@@ -217,7 +217,9 @@ async def verify_url(data: UrlInput):
         task_id = str(uuid.uuid4())
         url = str(data.url)
         normalized_text = normalize_input(urls=[url])
-        return await run_verification_async(normalized_text, task_id, "url")
+        result = await run_verification_async(normalized_text, task_id, "url")
+        result["task_id"] = task_id
+        return result
     except HTTPException:
         raise
     except Exception as e:
@@ -247,7 +249,9 @@ async def verify_file(file: UploadFile = File(...)):
 
         update_progress(task_id, 5, 100, "Extracting text from file...", "processing")
         normalized_text = normalize_input(files=[tmp_path])
-        return await run_verification_async(normalized_text, task_id, "file")
+        result = await run_verification_async(normalized_text, task_id, "file")
+        result["task_id"] = task_id
+        return result
     except HTTPException:
         raise
     except Exception as e:

@@ -5,7 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, CheckCircle2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+// Get API base URL function - call at runtime
+const getApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (envUrl && typeof envUrl === 'string' && envUrl.startsWith('http')) {
+    return envUrl.replace(/\/$/, '');
+  }
+  return "http://127.0.0.1:8000";
+};
 
 interface ProgressData {
   completed: number;
@@ -34,7 +41,8 @@ export function DynamicProgressBar({ taskId, onComplete }: DynamicProgressBarPro
     // Poll for progress updates
     const pollProgress = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/progress/${taskId}`);
+        const baseUrl = getApiBaseUrl();
+        const response = await fetch(`${baseUrl}/progress/${taskId}`);
         if (response.ok) {
           const data = await response.json();
           setProgress(data);
@@ -54,9 +62,14 @@ export function DynamicProgressBar({ taskId, onComplete }: DynamicProgressBarPro
             }, 1000);
             return; // Stop polling
           }
+        } else if (response.status === 404) {
+          // Task not found yet, wait a bit before retrying
+          // This can happen if the backend hasn't initialized the progress yet
+          console.warn(`Progress task ${taskId} not found yet, will retry...`);
         }
       } catch (error) {
         console.error("Progress polling error:", error);
+        // Don't stop polling on network errors, just log them
       }
     };
 

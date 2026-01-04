@@ -89,5 +89,16 @@ async def stream_progress(task_id: str):
 @router.get("/{task_id}")
 async def get_progress_status(task_id: str):
     """Get current progress status."""
-    return get_progress(task_id)
+    progress = get_progress(task_id)
+    # If task doesn't exist yet, return pending status instead of 404
+    if progress["status"] == "pending" and progress["percentage"] == 0:
+        # Task might not be initialized yet, return a default pending response
+        return {
+            "completed": 0,
+            "total": 0,
+            "current": "Initializing...",
+            "status": "pending",
+            "percentage": 0
+        }
+    return progress
 

@@ -7,7 +7,25 @@ import { InputArea } from "@/components/InputArea";
 import { ResultsDisplay } from "@/components/ResultsDisplay";
 import { DynamicProgressBar } from "@/components/DynamicProgressBar";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+// Get API base URL function - call at runtime to ensure env vars are available
+const getApiBaseUrl = () => {
+  // Always use absolute URL - never relative
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  
+  // Validate and return environment URL if valid
+  if (envUrl && typeof envUrl === 'string' && (envUrl.startsWith('http://') || envUrl.startsWith('https://'))) {
+    // Remove trailing slash if present
+    const url = envUrl.replace(/\/$/, '');
+    console.log('[API Config] Using environment URL:', url);
+    return url;
+  }
+  
+  // Default to backend server - MUST be absolute URL
+  const defaultUrl = "http://127.0.0.1:8000";
+  console.log('[API Config] Using default URL:', defaultUrl);
+  console.log('[API Config] NEXT_PUBLIC_API_URL was:', envUrl);
+  return defaultUrl;
+};
 
 export default function Home() {
   const [results, setResults] = useState<any>(null);
@@ -26,14 +44,20 @@ export default function Home() {
     try {
       let response;
       const formData = new FormData();
-      // Generate taskId only on client side to avoid hydration issues
-      const taskId = typeof window !== 'undefined' ? `${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : null;
 
       if (type === "text") {
         setProgress({ percentage: 0, message: "Starting verification..." });
-        setTaskId(taskId); // Set taskId for progress tracking
         
-        response = await fetch(`${API_BASE_URL}/verify/text`, {
+        const baseUrl = getApiBaseUrl();
+        // Ensure URL is absolute
+        if (!baseUrl || (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://'))) {
+          throw new Error(`Invalid API URL: ${baseUrl}. Must be an absolute URL starting with http:// or https://`);
+        }
+        const apiUrl = `${baseUrl}/verify/text`;
+        console.log("API Base URL:", baseUrl);
+        console.log("Making request to:", apiUrl);
+        
+        response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -42,9 +66,13 @@ export default function Home() {
         });
       } else if (type === "url") {
         setProgress({ percentage: 0, message: "Fetching URL content..." });
-        setTaskId(taskId);
         
-        response = await fetch(`${API_BASE_URL}/verify/url`, {
+        const baseUrl = getApiBaseUrl();
+        const apiUrl = `${baseUrl}/verify/url`;
+        console.log("API Base URL:", baseUrl);
+        console.log("Making request to:", apiUrl);
+        
+        response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -54,9 +82,13 @@ export default function Home() {
       } else if (type === "file") {
         formData.append("file", data.file);
         setProgress({ percentage: 5, message: "Uploading file..." });
-        setTaskId(taskId);
         
-        response = await fetch(`${API_BASE_URL}/verify/file`, {
+        const baseUrl = getApiBaseUrl();
+        const apiUrl = `${baseUrl}/verify/file`;
+        console.log("API Base URL:", baseUrl);
+        console.log("Making request to:", apiUrl);
+        
+        response = await fetch(apiUrl, {
           method: "POST",
           body: formData,
         });
@@ -76,10 +108,9 @@ export default function Home() {
         throw new Error("Empty response from server");
       }
       
-      // Use backend task_id if available, otherwise use frontend generated one
-      const finalTaskId = resultData.task_id || taskId;
-      if (finalTaskId) {
-        setTaskId(finalTaskId);
+      // Use backend task_id for progress tracking
+      if (resultData.task_id) {
+        setTaskId(resultData.task_id);
       }
       
       // Ensure results have the expected structure (remove task_id from display)

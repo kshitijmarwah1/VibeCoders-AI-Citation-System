@@ -45,7 +45,7 @@
 
 | 📊 Project Presentation | 🎥 Demo Video | 🌐 Live Demo |
 |:---:|:---:|:---:|
-| [📄 View Presentation PDF](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/blob/main/PS-3%20Hallucination%20Checker%20Sytem%20Team%20Vibe%20Coders%20%28Vibe%20Verifier%29.pdf) | [Add Demo Video Link Here] | [🌐 Live Demo](https://vibe-coders-ai-citation-system.vercel.app/) |
+| [📄 View Presentation PDF](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/blob/main/PS-3%20Hallucination%20Checker%20Sytem%20Team%20Vibe%20Coders%20%28Vibe%20Verifier%29.pdf) | [🎥 Watch Demo Video](https://youtu.be/DkaDsx1qiMA) | [🌐 Live Demo](https://vibe-coders-ai-citation-system.vercel.app/) |
 
 </div>
 
@@ -855,7 +855,7 @@ This project was created and maintained by:
 
 | | |
 |:---:|:---:|
-| **👑 Dhruv Gupta**<br/>**GitHub**: [@BeastBoom](https://github.com/BeastBoom)<br/>**Contributions**: 7 commits | **👑 Kshitij Marwah**<br/>**GitHub**: [@kshitijmarwah1](https://github.com/kshitijmarwah1)<br/>**Contributions**: 2 commits |
+| **👑 Dhruv Gupta**<br/>**GitHub**: [@BeastBoom](https://github.com/BeastBoom)<br/>**Contributions**: 21 commits | **👑 Kshitij Marwah**<br/>**GitHub**: [@kshitijmarwah1](https://github.com/kshitijmarwah1)<br/>**Contributions**: 2 commits |
 
 </div>
 
