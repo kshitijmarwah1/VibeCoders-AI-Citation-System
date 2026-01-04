@@ -12,13 +12,21 @@ app = FastAPI(
 )
 
 # CORS - Allow all origins in development, restrict in production
-cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+cors_origins_env = os.getenv("CORS_ORIGINS", "")
+cors_origins = cors_origins_env.split(",") if cors_origins_env else []
+# Add default origins
+default_origins = [
+    "https://vibe-coders-ai-citation-system.vercel.app",  # Production frontend
+    "http://localhost:3000",  # Local development
+]
+# Combine environment origins with defaults, removing duplicates
+all_origins = list(set(cors_origins + default_origins))
+# Filter out empty strings
+all_origins = [origin.strip() for origin in all_origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://https://vibe-coders-ai-citation-system.vercel.app",  # 🔴 ADD THIS
-        "http://localhost:3000",                  # for local dev
-    ],
+    allow_origins=all_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
