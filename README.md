@@ -45,7 +45,7 @@
 
 | 📊 Project Presentation | 🎥 Demo Video | 🌐 Live Demo |
 |:---:|:---:|:---:|
-| [Add PPT/Slides Link Here] | [Add Demo Video Link Here] | [Add Live Demo URL Here] |
+| [📄 View Presentation PDF](https://github.com/kshitijmarwah1/VibeCoders-AI-Citation-System/blob/main/PS-3%20Hallucination%20Checker%20Sytem%20Team%20Vibe%20Coders%20%28Vibe%20Verifier%29.pdf) | [Add Demo Video Link Here] | [🌐 Live Demo](https://vibe-coders-ai-citation-system.vercel.app/) |
 
 </div>
 

@@ -11,25 +11,35 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS - Allow all origins in development, restrict in production
+# CORS Configuration - MUST be configured before adding routers
 cors_origins_env = os.getenv("CORS_ORIGINS", "")
 cors_origins = cors_origins_env.split(",") if cors_origins_env else []
-# Add default origins
-default_origins = [
-    "https://vibe-coders-ai-citation-system.vercel.app",  # Production frontend
-    "http://localhost:3000",  # Local development
-]
-# Combine environment origins with defaults, removing duplicates
-all_origins = list(set(cors_origins + default_origins))
-# Filter out empty strings
-all_origins = [origin.strip() for origin in all_origins if origin.strip()]
 
+# Default allowed origins
+default_origins = [
+    "https://vibe-coders-ai-citation-system.vercel.app",  # Production frontend (Vercel)
+    "http://localhost:3000",  # Local development
+    "http://localhost:3001",  # Alternative local port
+]
+
+# Combine environment origins with defaults, removing duplicates and empty strings
+all_origins = list(set(
+    [origin.strip() for origin in cors_origins if origin.strip()] + 
+    default_origins
+))
+
+# Print allowed origins for debugging (remove in production if sensitive)
+print(f"CORS allowed origins: {all_origins}")
+
+# Add CORS middleware - CRITICAL: Must be added BEFORE routers
 app.add_middleware(
     CORSMiddleware,
     allow_origins=all_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
 
 app.include_router(verify_router)
@@ -40,6 +50,16 @@ app.include_router(progress_router)
 def health():
     """Health check endpoint."""
     return {"status": "ok", "service": "AI Verification Service"}
+
+
+@app.get("/cors-test")
+def cors_test():
+    """Test endpoint to verify CORS is working."""
+    return {
+        "status": "ok",
+        "message": "CORS is configured correctly",
+        "allowed_origins": all_origins
+    }
 
 
 @app.exception_handler(Exception)
